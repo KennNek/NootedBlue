@@ -23,7 +23,18 @@ void HSW::init() {
 
 bool HSW::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
     if (kextHSWHW.loadIndex == index) {
-        PANIC("hsw", "Patches for the kexts have not been developed for macOS High Sierra and newer.");
+        KernelPatcher::LookupPatch patches[] = {
+            {&kextHSWHW, kHSWProbeCatalina1Original, kHSWProbeCatalina1Patched, arrsize(kHSWProbeCatalina1Original), 1},
+            {&kextHSWHW, kHSWProbeCatalina2Original, kHSWProbeCatalina2Patched, arrsize(kHSWProbeCatalina2Original), 1},
+            //{&kextHSWHW, kHSWProbeCatalina3Original, kHSWProbeCatalina3Patched, arrsize(kHSWProbeCatalina3Original),
+            //1},
+            {&kextHSWHW, kHSWProbeCatalina4Original, kHSWProbeCatalina4Patched, arrsize(kHSWProbeCatalina4Original), 1},
+        };
+        for (auto &patch : patches) {
+            patcher.applyLookupPatch(&patch);
+            patcher.clearError();
+        }
+        DBGLOG("hsw", "Applied patches for HD5000Graphics");
         return true;
     }
 

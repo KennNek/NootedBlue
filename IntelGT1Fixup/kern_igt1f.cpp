@@ -25,7 +25,6 @@ void IGT1F::init() {
             static_cast<IGT1F *>(user)->processKext(patcher, index, address, size);
         },
         this);
-    apl.init();
     bsw.init();
     hsw.init();
     skl.init();
