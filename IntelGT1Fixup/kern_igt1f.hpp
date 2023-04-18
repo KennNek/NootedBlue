@@ -1,4 +1,4 @@
-//  Copyright © 2022-2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
+//  Copyright © 2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
 //  details.
 
 #ifndef kern_igt1f_hpp
@@ -30,6 +30,7 @@ class IGT1F {
     void processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
 
     private:
+	int kVer {0};
     iGFXGen igfxGen = iGFXGen::Unknown;
     uint32_t deviceId {0};
     uint16_t revision {0};

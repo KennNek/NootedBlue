@@ -105,9 +105,9 @@
 				F009B7A729E4FC6300786AFF /* kern_bsw.hpp */,
 				F009B7A429E4EEC300786AFF /* kern_hsw.cpp */,
 				F067C20A29D82E58004BB52E /* kern_hsw.hpp */,
+				F067C21129D82E58004BB52E /* kern_patches.hpp */,
 				F009B7AE29E505C600786AFF /* kern_skl.cpp */,
 				F009B7AF29E505C600786AFF /* kern_skl.hpp */,
-				F067C21129D82E58004BB52E /* kern_patches.hpp */,
 				F009B7A029E4EE3C00786AFF /* kern_start.cpp */,
 			);
 			path = IntelGT1Fixup;

@@ -1,4 +1,4 @@
-//  Copyright © 2022-2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
+//  Copyright © 2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
 //  details.
 
 #include "kern_igt1f.hpp"
@@ -48,6 +48,7 @@ void IGT1F::processPatcher(KernelPatcher &patcher) {
         }
 
         static uint8_t builtin[] = {0x01};
+		this->kVer = getKernelVersion();
         this->iGPU->setProperty("built-in", builtin, arrsize(builtin));
         this->deviceId = WIOKit::readPCIConfigValue(this->iGPU, WIOKit::kIOPCIConfigDeviceID);
 
@@ -60,7 +61,7 @@ void IGT1F::processPatcher(KernelPatcher &patcher) {
 void IGT1F::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
     if (bsw.processKext(patcher, index, address, size)) {
         DBGLOG("igt1f", "Processed AppleIntelBDWGraphics");
-    } else if (hsw.processKext(patcher, index, address, size)) {
+    } else if (hsw.processDrivers(patcher, index)) {
         DBGLOG("igt1f", "Processed AppleIntelHD5000Graphics");
     } else if (skl.processKext(patcher, index, address, size)) {
         DBGLOG("igt1f", "Processed AppleIntelSKLGraphics");

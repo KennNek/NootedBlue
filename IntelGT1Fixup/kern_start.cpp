@@ -1,4 +1,4 @@
-//  Copyright © 2022-2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
+//  Copyright © 2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
 //  details.
 
 #include "kern_igt1f.hpp"
@@ -29,7 +29,7 @@ PluginConfiguration ADDPR(config) {
     arrsize(bootargDebug),
     bootargBeta,
     arrsize(bootargBeta),
-    KernelVersion::BigSur,
+    KernelVersion::Monterey,
     KernelVersion::HighSierra,
     []() { igt1f.init(); },
 };

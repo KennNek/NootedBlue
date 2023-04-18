@@ -1,4 +1,4 @@
-//  Copyright © 2022-2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
+//  Copyright © 2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
 //  details.
 
 #ifndef kern_hsw_hpp
@@ -10,7 +10,7 @@ class HSW {
     public:
     static HSW *callback;
     void init();
-    bool processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
+    bool processDrivers(KernelPatcher &patcher, size_t index);
 };
 
 #endif /* kern_hsw_hpp */
