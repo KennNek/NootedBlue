@@ -2,7 +2,6 @@
 //  details.
 
 #include "kern_skl.hpp"
-#include "kern_patches.hpp"
 #include <Headers/kern_api.hpp>
 
 static const char *pathSKLFB =

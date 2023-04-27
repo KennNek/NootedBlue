@@ -4,7 +4,6 @@
 #include "kern_igt1f.hpp"
 #include "kern_bsw.hpp"
 #include "kern_hsw.hpp"
-#include "kern_patches.hpp"
 #include "kern_skl.hpp"
 #include <Headers/kern_api.hpp>
 #include <Headers/kern_devinfo.hpp>

@@ -2,14 +2,14 @@
 //  details.
 
 #include "kern_hsw.hpp"
-#include "kern_patches.hpp"
+#include "kern_hsw_patches.hpp"
 #include "kern_igt1f.hpp"
 #include <Headers/kern_api.hpp>
 
 static const char *pathHSWFB =
-    "/System/Library/Extensions/AppleIntelFramebufferAzul.kext/Contents/MacOS/AppleIntelFramebufferAzul";
+	"/System/Library/Extensions/AppleIntelFramebufferAzul.kext/Contents/MacOS/AppleIntelFramebufferAzul";
 static const char *pathHSWHW =
-    "/System/Library/Extensions/AppleIntelHD5000Graphics.kext/Contents/MacOS/AppleIntelHD5000Graphics";
+	"/System/Library/Extensions/AppleIntelHD5000Graphics.kext/Contents/MacOS/AppleIntelHD5000Graphics";
 
 static KernelPatcher::KextInfo kextHSWFB {"com.apple.driver.AppleIntelFramebufferAzul", &pathHSWFB, 1, {}, {},
     KernelPatcher::KextInfo::Unloaded};
@@ -26,10 +26,10 @@ bool HSW::processDrivers(KernelPatcher &patcher, size_t index) {
     if (kextHSWHW.loadIndex == index) {
 		if (IGT1F::callback->kVer == 16) {
 			KernelPatcher::LookupPatch patches[] = {
-				{&kextHSWHW, kHSWProbeSierra1Original, kHSWProbeSierra1Patched, arrsize(kHSWProbeSierra1Original), 1},
-				{&kextHSWHW, kHSWProbeSierra2Original, kHSWProbeSierra2Patched, arrsize(kHSWProbeSierra2Original), 1},
-				{&kextHSWHW, kHSWProbeSierra3Original, kHSWProbeSierra3Patched, arrsize(kHSWProbeSierra3Original), 1},
-				{&kextHSWHW, kHSWProbeSierra4Original, kHSWProbeSierra4Patched, arrsize(kHSWProbeSierra4Original), 1},
+				{&kextHSWHW, kHSWHWProbeSierra1Original, kHSWHWProbeSierra1Patched, arrsize(kHSWHWProbeSierra1Original), 1},
+				{&kextHSWHW, kHSWHWProbeSierra2Original, kHSWHWProbeSierra2Patched, arrsize(kHSWHWProbeSierra2Original), 1},
+				{&kextHSWHW, kHSWHWProbeSierra3Original, kHSWHWProbeSierra3Patched, arrsize(kHSWHWProbeSierra3Original), 1},
+				{&kextHSWHW, kHSWHWProbeSierra4Original, kHSWHWProbeSierra4Patched, arrsize(kHSWHWProbeSierra4Original), 1},
 			};
 			for (auto &patch : patches) {
 				patcher.applyLookupPatch(&patch);
@@ -41,7 +41,7 @@ bool HSW::processDrivers(KernelPatcher &patcher, size_t index) {
 				{&kextHSWHW, kHSWProbeHS2Original, kHSWProbeHS2Patched, arrsize(kHSWProbeHS2Original), 1},
 				{&kextHSWHW, kHSWProbeHS3Original, kHSWProbeHS3Patched, arrsize(kHSWProbeHS3Original), 1},
 				{&kextHSWHW, kHSWProbeHS4Original, kHSWProbeHS4Patched, arrsize(kHSWProbeHS4Original), 1},
-			};
+ 			};
 			for (auto &patch : patches) {
 				patcher.applyLookupPatch(&patch);
 				patcher.clearError();
@@ -68,7 +68,9 @@ bool HSW::processDrivers(KernelPatcher &patcher, size_t index) {
 				patcher.applyLookupPatch(&patch);
 				patcher.clearError();
 			}
-		}
+		} else if (IGT1F::callback->kVer == 20) {
+			DBGLOG("hsw", "Big Sur patches aren't in the work yet");
+		};
         DBGLOG("hsw", "Applied patches for HD5kGraphics");
         return true;
     }

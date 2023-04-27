@@ -2,7 +2,6 @@
 //  details.
 
 #include "kern_bsw.hpp"
-#include "kern_patches.hpp"
 #include <Headers/kern_api.hpp>
 
 static const char *pathBSWFB =

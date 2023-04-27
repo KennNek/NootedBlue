@@ -13,4 +13,4 @@ class BSW {
     bool processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
 };
 
-#endif /* kern_hsw_hpp */
+#endif /* kern_bsw_hpp */
