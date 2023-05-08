@@ -4,13 +4,14 @@
 #ifndef kern_hsw_hpp
 #define kern_hsw_hpp
 #include <Headers/kern_patcher.hpp>
+#include <Headers/kern_user.hpp>
 #include <Headers/kern_util.hpp>
 
 class HSW {
     public:
     static HSW *callback;
     void init();
-    bool processDrivers(KernelPatcher &patcher, size_t index);
+    bool configurePatches(size_t index);
 };
 
 #endif /* kern_hsw_hpp */

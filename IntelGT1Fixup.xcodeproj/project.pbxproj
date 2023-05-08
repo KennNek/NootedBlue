@@ -12,14 +12,15 @@
 		F009B7A129E4EE3C00786AFF /* kern_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A029E4EE3C00786AFF /* kern_start.cpp */; };
 		F009B7A329E4EEBA00786AFF /* kern_igt1f.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A229E4EEBA00786AFF /* kern_igt1f.cpp */; };
 		F009B7A529E4EEC300786AFF /* kern_hsw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A429E4EEC300786AFF /* kern_hsw.cpp */; };
-		F009B7A829E4FC6300786AFF /* kern_bsw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A629E4FC6300786AFF /* kern_bsw.cpp */; };
-		F009B7A929E4FC6300786AFF /* kern_bsw.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F009B7A729E4FC6300786AFF /* kern_bsw.hpp */; };
+		F009B7A829E4FC6300786AFF /* kern_bdw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A629E4FC6300786AFF /* kern_bdw.cpp */; };
+		F009B7A929E4FC6300786AFF /* kern_bdw.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F009B7A729E4FC6300786AFF /* kern_bdw.hpp */; };
 		F009B7B029E505C600786AFF /* kern_skl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7AE29E505C600786AFF /* kern_skl.cpp */; };
 		F009B7B129E505C600786AFF /* kern_skl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F009B7AF29E505C600786AFF /* kern_skl.hpp */; };
 		F067C21A29D82E59004BB52E /* kern_hsw.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F067C20A29D82E58004BB52E /* kern_hsw.hpp */; };
 		F067C22629D84710004BB52E /* (null) in Sources */ = {isa = PBXBuildFile; };
 		F0B49E9529D93A600067BE5B /* (null) in Headers */ = {isa = PBXBuildFile; };
 		F0B49E9629D93A600067BE5B /* (null) in Sources */ = {isa = PBXBuildFile; };
+		F0D691DB2A07800100CCC481 /* kern_bdw_patches.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0D691DA2A07800000CCC481 /* kern_bdw_patches.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -55,13 +56,14 @@
 		F009B7A029E4EE3C00786AFF /* kern_start.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kern_start.cpp; sourceTree = "<group>"; };
 		F009B7A229E4EEBA00786AFF /* kern_igt1f.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_igt1f.cpp; sourceTree = "<group>"; };
 		F009B7A429E4EEC300786AFF /* kern_hsw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_hsw.cpp; sourceTree = "<group>"; };
-		F009B7A629E4FC6300786AFF /* kern_bsw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_bsw.cpp; sourceTree = "<group>"; };
-		F009B7A729E4FC6300786AFF /* kern_bsw.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_bsw.hpp; sourceTree = "<group>"; };
+		F009B7A629E4FC6300786AFF /* kern_bdw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_bdw.cpp; sourceTree = "<group>"; };
+		F009B7A729E4FC6300786AFF /* kern_bdw.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_bdw.hpp; sourceTree = "<group>"; };
 		F009B7AE29E505C600786AFF /* kern_skl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_skl.cpp; sourceTree = "<group>"; };
 		F009B7AF29E505C600786AFF /* kern_skl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_skl.hpp; sourceTree = "<group>"; };
 		F067C20329D82E57004BB52E /* kern_igt1f.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_igt1f.hpp; sourceTree = "<group>"; };
 		F067C20A29D82E58004BB52E /* kern_hsw.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_hsw.hpp; sourceTree = "<group>"; };
 		F067C21129D82E58004BB52E /* kern_hsw_patches.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_hsw_patches.hpp; sourceTree = "<group>"; };
+		F0D691DA2A07800000CCC481 /* kern_bdw_patches.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_bdw_patches.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,8 +103,9 @@
 				1C748C2E1C21952C0024EED2 /* Info.plist */,
 				F009B7A229E4EEBA00786AFF /* kern_igt1f.cpp */,
 				F067C20329D82E57004BB52E /* kern_igt1f.hpp */,
-				F009B7A629E4FC6300786AFF /* kern_bsw.cpp */,
-				F009B7A729E4FC6300786AFF /* kern_bsw.hpp */,
+				F009B7A629E4FC6300786AFF /* kern_bdw.cpp */,
+				F009B7A729E4FC6300786AFF /* kern_bdw.hpp */,
+				F0D691DA2A07800000CCC481 /* kern_bdw_patches.hpp */,
 				F009B7A429E4EEC300786AFF /* kern_hsw.cpp */,
 				F067C20A29D82E58004BB52E /* kern_hsw.hpp */,
 				F067C21129D82E58004BB52E /* kern_hsw_patches.hpp */,
@@ -167,9 +170,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				F067C21A29D82E59004BB52E /* kern_hsw.hpp in Headers */,
-				F009B7A929E4FC6300786AFF /* kern_bsw.hpp in Headers */,
+				F009B7A929E4FC6300786AFF /* kern_bdw.hpp in Headers */,
 				F009B7B129E505C600786AFF /* kern_skl.hpp in Headers */,
 				F0B49E9529D93A600067BE5B /* (null) in Headers */,
+				F0D691DB2A07800100CCC481 /* kern_bdw_patches.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -274,7 +278,7 @@
 				F009B7A529E4EEC300786AFF /* kern_hsw.cpp in Sources */,
 				F009B7A129E4EE3C00786AFF /* kern_start.cpp in Sources */,
 				F067C22629D84710004BB52E /* (null) in Sources */,
-				F009B7A829E4FC6300786AFF /* kern_bsw.cpp in Sources */,
+				F009B7A829E4FC6300786AFF /* kern_bdw.cpp in Sources */,
 				F009B7A329E4EEBA00786AFF /* kern_igt1f.cpp in Sources */,
 				F0B49E9629D93A600067BE5B /* (null) in Sources */,
 				CE405ED91E4A080700AA0B3D /* plugin_start.cpp in Sources */,

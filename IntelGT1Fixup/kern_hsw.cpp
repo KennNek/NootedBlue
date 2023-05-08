@@ -7,14 +7,16 @@
 #include <Headers/kern_api.hpp>
 
 static const char *pathHSWFB =
-	"/System/Library/Extensions/AppleIntelFramebufferAzul.kext/Contents/MacOS/AppleIntelFramebufferAzul";
+    "/System/Library/Extensions/AppleIntelFramebufferAzul.kext/Contents/MacOS/AppleIntelFramebufferAzul";
 static const char *pathHSWHW =
-	"/System/Library/Extensions/AppleIntelHD5000Graphics.kext/Contents/MacOS/AppleIntelHD5000Graphics";
+    "/System/Library/Extensions/AppleIntelHD5000Graphics.kext/Contents/MacOS/AppleIntelHD5000Graphics";
 
 static KernelPatcher::KextInfo kextHSWFB {"com.apple.driver.AppleIntelFramebufferAzul", &pathHSWFB, 1, {}, {},
     KernelPatcher::KextInfo::Unloaded};
 static KernelPatcher::KextInfo kextHSWHW {"com.apple.driver.AppleIntelHD5000Graphics", &pathHSWHW, 1, {}, {},
     KernelPatcher::KextInfo::Unloaded};
+
+IGT1F igt1f;
 
 void HSW::init() {
     callback = this;
@@ -22,56 +24,87 @@ void HSW::init() {
     lilu.onKextLoadForce(&kextHSWHW);
 }
 
-bool HSW::processDrivers(KernelPatcher &patcher, size_t index) {
+bool HSW::configurePatches(size_t index) {
     if (kextHSWHW.loadIndex == index) {
-		if (IGT1F::callback->kVer == 16) {
-			KernelPatcher::LookupPatch patches[] = {
-				{&kextHSWHW, kHSWHWProbeSierra1Original, kHSWHWProbeSierra1Patched, arrsize(kHSWHWProbeSierra1Original), 1},
-				{&kextHSWHW, kHSWHWProbeSierra2Original, kHSWHWProbeSierra2Patched, arrsize(kHSWHWProbeSierra2Original), 1},
-				{&kextHSWHW, kHSWHWProbeSierra3Original, kHSWHWProbeSierra3Patched, arrsize(kHSWHWProbeSierra3Original), 1},
-				{&kextHSWHW, kHSWHWProbeSierra4Original, kHSWHWProbeSierra4Patched, arrsize(kHSWHWProbeSierra4Original), 1},
-			};
-			for (auto &patch : patches) {
-				patcher.applyLookupPatch(&patch);
-				patcher.clearError();
-			}
-		} else if (IGT1F::callback->kVer == 17) {
-			KernelPatcher::LookupPatch patches[] = {
-				{&kextHSWHW, kHSWProbeHS1Original, kHSWProbeHS1Patched, arrsize(kHSWProbeHS1Original), 1},
-				{&kextHSWHW, kHSWProbeHS2Original, kHSWProbeHS2Patched, arrsize(kHSWProbeHS2Original), 1},
-				{&kextHSWHW, kHSWProbeHS3Original, kHSWProbeHS3Patched, arrsize(kHSWProbeHS3Original), 1},
-				{&kextHSWHW, kHSWProbeHS4Original, kHSWProbeHS4Patched, arrsize(kHSWProbeHS4Original), 1},
- 			};
-			for (auto &patch : patches) {
-				patcher.applyLookupPatch(&patch);
-				patcher.clearError();
-			}
-		} else if (IGT1F::callback->kVer == 18) {
-			KernelPatcher::LookupPatch patches[] = {
-				{&kextHSWHW, kHSWHWMojave1Original, kHSWHWMojave1Patched, arrsize(kHSWHWMojave1Original), 1},
-				{&kextHSWHW, kHSWHWMojave2Original, kHSWHWMojave2Patched, arrsize(kHSWHWMojave2Original), 1},
-				{&kextHSWHW, kHSWHWMojave3Original, kHSWHWMojave3Patched, arrsize(kHSWHWMojave3Original), 1},
-				{&kextHSWHW, kHSWHWMojave4Original, kHSWHWMojave4Patched, arrsize(kHSWHWMojave4Original), 1},
-			};
-			for (auto &patch : patches) {
-				patcher.applyLookupPatch(&patch);
-				patcher.clearError();
-			}
-		} else if (IGT1F::callback->kVer == 19) {
-			KernelPatcher::LookupPatch patches[] = {
-				{&kextHSWHW, kHSWProbeCatalina1Original, kHSWProbeCatalina1Patched, arrsize(kHSWProbeCatalina1Original), 1},
-				{&kextHSWHW, kHSWProbeCatalina2Original, kHSWProbeCatalina2Patched, arrsize(kHSWProbeCatalina2Original), 1},
-				//{&kextHSWHW, kHSWProbeCatalina3Original, kHSWProbeCatalina3Patched, arrsize(kHSWProbeCatalina3Original), 1},
-				{&kextHSWHW, kHSWProbeCatalina4Original, kHSWProbeCatalina4Patched, arrsize(kHSWProbeCatalina4Original), 1},
-			};
-			for (auto &patch : patches) {
-				patcher.applyLookupPatch(&patch);
-				patcher.clearError();
-			}
-		} else if (IGT1F::callback->kVer == 20) {
-			DBGLOG("hsw", "Big Sur patches aren't in the work yet");
-		};
-        DBGLOG("hsw", "Applied patches for HD5kGraphics");
+        IGT1F::callback->igfxGen = iGFXGen::Haswell;
+
+        IGT1F::callback->patchset.MiscNames->fb = "AppleIntelFramebufferAzul";
+        IGT1F::callback->patchset.MiscNames->hw = "AppleIntelHD5000Graphics";
+        IGT1F::callback->patchset.MiscNames->mtl = "AppleIntelHD5000GraphicsMTLDriver";
+
+        IGT1F::callback->patchset.MTLProcInfo = &kHSWMTLProcInfo;
+        IGT1F::callback->patchset.VAProcInfo = &kHSWVAProcInfo;
+
+        if (IGT1F::callback->kVer == 16) {
+            DBGLOG("hsw", "Configuring patchset for Sierra");
+
+            IGT1F::callback->patchset.MiscNames->os = "Sierra";
+
+            DBGLOG("hsw", "Setting patches for HD5000Graphics...");
+
+            IGT1F::callback->patchset.HWPatch1->find = kHSWHWProbeSierra1Original;
+            IGT1F::callback->patchset.HWPatch1->repl = kHSWHWProbeSierra1Patched;
+            IGT1F::callback->patchset.HWPatch1->arrsize = arrsize(kHSWHWProbeSierra1Original);
+            IGT1F::callback->patchset.HWPatch2->find = kHSWHWProbeSierra2Original;
+            IGT1F::callback->patchset.HWPatch2->repl = kHSWHWProbeSierra2Patched;
+            IGT1F::callback->patchset.HWPatch2->arrsize = arrsize(kHSWHWProbeSierra2Original);
+            IGT1F::callback->patchset.HWPatch3->find = kHSWHWProbeSierra3Original;
+            IGT1F::callback->patchset.HWPatch3->repl = kHSWHWProbeSierra3Patched;
+            IGT1F::callback->patchset.HWPatch3->arrsize = arrsize(kHSWHWProbeSierra3Original);
+            IGT1F::callback->patchset.HWPatch4->find = kHSWHWProbeSierra4Original;
+            IGT1F::callback->patchset.HWPatch4->repl = kHSWHWProbeSierra4Patched;
+            IGT1F::callback->patchset.HWPatch4->arrsize = arrsize(kHSWHWProbeSierra4Original);
+
+            DBGLOG("hsw", "Setting patches for MTLDriver...");
+
+            IGT1F::callback->patchset.MTLPatch1 = &kBinModInfoHSWMTLSierra1;
+            IGT1F::callback->patchset.MTLPatch2 = &kBinModInfoHSWMTLSierra2;
+
+            DBGLOG("hsw", "Setting patches for VADriver...");
+
+            IGT1F::callback->patchset.VAPatch1 = &kBinModInfoHSWVASierra1;
+            IGT1F::callback->patchset.VAPatch2 = &kBinModInfoHSWVASierra2;
+            IGT1F::callback->patchset.VAPatch3 = &kBinModInfoHSWVASierra3;
+            IGT1F::callback->patchset.VAPatch4 = &kBinModInfoHSWVASierra4;
+            IGT1F::callback->patchset.VAPatch5 = &kBinModInfoHSWVASierra5;
+
+        } else if (IGT1F::callback->kVer == 17) {
+            DBGLOG("hsw", "Applying High Sierra patchset");
+
+            IGT1F::callback->patchset.HWPatch1->find = kHSWHWProbeHS1Original;
+            IGT1F::callback->patchset.HWPatch1->repl = kHSWHWProbeHS1Patched;
+            IGT1F::callback->patchset.HWPatch1->arrsize = arrsize(kHSWHWProbeHS1Original);
+            IGT1F::callback->patchset.HWPatch2->find = kHSWHWProbeHS2Original;
+            IGT1F::callback->patchset.HWPatch2->repl = kHSWHWProbeHS2Patched;
+            IGT1F::callback->patchset.HWPatch2->arrsize = arrsize(kHSWHWProbeHS2Original);
+            IGT1F::callback->patchset.HWPatch3->find = kHSWHWProbeHS3Original;
+            IGT1F::callback->patchset.HWPatch3->repl = kHSWHWProbeHS3Patched;
+            IGT1F::callback->patchset.HWPatch3->arrsize = arrsize(kHSWHWProbeHS3Original);
+            IGT1F::callback->patchset.HWPatch4->find = kHSWHWProbeHS4Original;
+            IGT1F::callback->patchset.HWPatch4->repl = kHSWHWProbeHS4Patched;
+            IGT1F::callback->patchset.HWPatch4->arrsize = arrsize(kHSWHWProbeHS4Original);
+
+            DBGLOG("hsw", "Setting patches for MTLDriver...");
+
+            IGT1F::callback->patchset.MTLPatch1 = &kBinModInfoHSWMTLHS1;
+            IGT1F::callback->patchset.MTLPatch2 = &kBinModInfoHSWMTLHS2;
+
+            DBGLOG("hsw", "Setting patches for VADriver...");
+
+            IGT1F::callback->patchset.VAPatch1 = &kBinModInfoHSWVAHS1;
+            IGT1F::callback->patchset.VAPatch2 = &kBinModInfoHSWVAHS2;
+            IGT1F::callback->patchset.VAPatch3 = &kBinModInfoHSWVAHS3;
+            IGT1F::callback->patchset.VAPatch4 = &kBinModInfoHSWVAHS4;
+            IGT1F::callback->patchset.VAPatch5 = &kBinModInfoHSWVAHS5;
+
+        } else if (IGT1F::callback->kVer == 18) {
+            DBGLOG("hsw", "Mojave patchset unavailable! system breakage may occur!");
+        } else if (IGT1F::callback->kVer == 19) {
+            DBGLOG("hsw", "Catalina patchset unavailable! system breakage may occur!");
+        } else if (IGT1F::callback->kVer == 20) {
+            DBGLOG("hsw", "Big Sur patchset unavailable! system breakage may occur!");
+        };
+        DBGLOG("hsw", "Configured.");
         return true;
     }
 

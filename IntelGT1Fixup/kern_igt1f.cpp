@@ -2,15 +2,17 @@
 //  details.
 
 #include "kern_igt1f.hpp"
-#include "kern_bsw.hpp"
+#include "kern_bdw.hpp"
 #include "kern_hsw.hpp"
+#include "kern_hsw_patches.hpp"
 #include "kern_skl.hpp"
 #include <Headers/kern_api.hpp>
 #include <Headers/kern_devinfo.hpp>
+#include <Headers/kern_util.hpp>
 
 IGT1F *IGT1F::callback = nullptr;
 
-static BSW bsw;
+static BDW bdw;
 static HSW hsw;
 static SKL skl;
 
@@ -24,7 +26,7 @@ void IGT1F::init() {
             static_cast<IGT1F *>(user)->processKext(patcher, index, address, size);
         },
         this);
-    bsw.init();
+    bdw.init();
     hsw.init();
     skl.init();
 }
@@ -47,7 +49,7 @@ void IGT1F::processPatcher(KernelPatcher &patcher) {
         }
 
         static uint8_t builtin[] = {0x01};
-		this->kVer = getKernelVersion();
+        this->kVer = getKernelVersion();
         this->iGPU->setProperty("built-in", builtin, arrsize(builtin));
         this->deviceId = WIOKit::readPCIConfigValue(this->iGPU, WIOKit::kIOPCIConfigDeviceID);
 
@@ -55,14 +57,83 @@ void IGT1F::processPatcher(KernelPatcher &patcher) {
     } else {
         SYSLOG("igt1f", "Failed to create DeviceInfo");
     }
+
+    if (this->kVer == 20) {
+        KernelPatcher::RouteRequest requests[] = {
+            {"_cs_validate_page", csValidatePage, this->orgCsValidatePage},
+        };
+
+        size_t num = arrsize(requests);
+
+        PANIC_COND(!patcher.routeMultipleLong(KernelPatcher::KernelID, requests, num), "igt1f",
+            "Failed to route kernel symbols");
+    }
 }
 
-void IGT1F::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
-    if (bsw.processKext(patcher, index, address, size)) {
-        DBGLOG("igt1f", "Processed AppleIntelBDWGraphics");
-    } else if (hsw.processDrivers(patcher, index)) {
-        DBGLOG("igt1f", "Processed AppleIntelHD5000Graphics");
+bool IGT1F::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
+    if (hsw.configurePatches(index)) {
+        DBGLOG("igt1f", "Applied Haswell configuration");
+    } else if (bdw.processKext(patcher, index, address, size)) {
+        DBGLOG("igt1f", "Applied Braswelll configuration");
     } else if (skl.processKext(patcher, index, address, size)) {
-        DBGLOG("igt1f", "Processed AppleIntelSKLGraphics");
+        DBGLOG("igt1f", "Applied Skylake/Apollo Lake configuration");
+    }
+
+    KernelPatcher::LookupPatch patches[] = {
+        {this->patchset.HWKext, this->patchset.HWPatch1->find, this->patchset.HWPatch1->repl,
+            this->patchset.HWPatch1->arrsize, 1},
+        {this->patchset.HWKext, this->patchset.HWPatch2->find, this->patchset.HWPatch2->repl,
+            this->patchset.HWPatch2->arrsize, 1},
+        {this->patchset.HWKext, this->patchset.HWPatch3->find, this->patchset.HWPatch3->repl,
+            this->patchset.HWPatch3->arrsize, 1},
+        {this->patchset.HWKext, this->patchset.HWPatch4->find, this->patchset.HWPatch4->repl,
+            this->patchset.HWPatch4->arrsize, 1},
+    };
+    for (auto &patch : patches) {
+        patcher.applyLookupPatch(&patch);
+        SYSLOG_COND(patcher.getError() != KernelPatcher::Error::NoError, "igt1f", "Failed to apply %c patch: %d",
+            this->patchset.MiscNames->hw, patcher.getError());
+        patcher.clearError();
+    }
+
+    DBGLOG("igt1f", "Applying patches for %c for OS version %c", callback->patchset.MiscNames->mtl,
+        this->patchset.MiscNames->os);
+
+    lilu.onProcLoadForce(this->patchset.MTLProcInfo, 1, nullptr, nullptr, this->patchset.MTLPatch1, 1);
+    lilu.onProcLoadForce(this->patchset.MTLProcInfo, 1, nullptr, nullptr, this->patchset.MTLPatch2, 1);
+    if (this->kVer > 16 && this->igfxGen == iGFXGen::Haswell) {
+        // 10.13 and 10.14 have 3 MTLDriver patches compared to 2 for Sierra, likely due to Metal 2 or something
+        lilu.onProcLoad(this->patchset.MTLProcInfo, 1, nullptr, nullptr, this->patchset.MTLPatch3, 1);
+    }
+
+    // argument here for debugging since VA isn't critical for operations
+    if (!checkKernelArgument("-patchbundlesoff")) {
+        DBGLOG("igt1f", "Applying patches for %c", this->patchset.MiscNames->va);
+        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch1, 1);
+        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch2, 1);
+        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch3, 1);
+        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch4, 1);
+        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch5, 1);
+    }
+
+    return true;
+}
+
+void IGT1F::csValidatePage(vnode *vp, memory_object_t pager, memory_object_offset_t page_offset, const void *data,
+    int *validated_p, int *tainted_p, int *nx_p) {
+    FunctionCast(csValidatePage, callback->orgCsValidatePage)(vp, pager, page_offset, data, validated_p, tainted_p,
+        nx_p);
+
+    char path[PATH_MAX];
+    int pathlen = PATH_MAX;
+    if (LIKELY(!vn_getpath(vp, path, &pathlen))) {
+        if (UNLIKELY(UserPatcher::matchSharedCachePath(path))) {
+            if (callback->igfxGen == iGFXGen::Haswell) {
+                if (callback->kVer == 20) {
+                    DBGLOG("igt1f", "Placeholder code for the future, usually this is when we would start patching "
+                                    "bundles from the dyld cache");
+                }
+            }
+        }
     }
 }
