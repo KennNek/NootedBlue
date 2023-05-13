@@ -5,6 +5,7 @@
 #include "kern_gen8.hpp"
 #include "kern_gen9.hpp"
 #include "kern_gen9_5.hpp"
+#include "kern_gen11.hpp"
 #include "kern_hsw.hpp"
 #include <Headers/kern_api.hpp>
 #include <Headers/kern_devinfo.hpp>
@@ -15,6 +16,7 @@ NBlue *NBlue::callback = nullptr;
 static Gen8 gen8;
 static Gen9 gen9;
 static Gen9_5 gen9_5;
+static Gen11 gen11;
 static HSW hsw;
 
 void NBlue::init() {
@@ -59,7 +61,7 @@ void NBlue::processPatcher(KernelPatcher &patcher) {
 
         DeviceInfo::deleter(devInfo);
     } else {
-        SYSLOG("igt1f", "Failed to create DeviceInfo");
+        SYSLOG("nblue", "Failed to create DeviceInfo");
     }
 
     if (this->kVer == 20) {
@@ -69,19 +71,23 @@ void NBlue::processPatcher(KernelPatcher &patcher) {
 
         size_t num = arrsize(requests);
 
-        PANIC_COND(!patcher.routeMultipleLong(KernelPatcher::KernelID, requests, num), "igt1f",
+        PANIC_COND(!patcher.routeMultipleLong(KernelPatcher::KernelID, requests, num), "nblue",
             "Failed to route kernel symbols");
     }
 }
 
 bool NBlue::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
     if (hsw.configurePatches(index)) {
-        DBGLOG("igt1f", "Applied Haswell configuration");
+        DBGLOG("nblue", "Applied Haswell configuration");
     } else if (gen8.processKext(patcher, index, address, size)) {
-        DBGLOG("igt1f", "Applied Generation 8 configuration");
+        DBGLOG("nblue", "Applied Generation 8 configuration");
     } else if (gen9.processKext(patcher, index, address, size)) {
-        DBGLOG("igt1f", "Applied Skylake/Apollo Lake configuration");
-    }
+        DBGLOG("nblue", "Applied Generation 9 configuration");
+	} else if (gen9_5.processKext(patcher, index, address, size)) {
+		DBGLOG("nblue", "Applied Generation 9.5 configuration");
+	} else if (gen11.processKext(patcher, index, address, size)) {
+		DBGLOG("nblue", "Applied Generation 11 configuration");
+	}
 
     KernelPatcher::LookupPatch patches[] = {
         {this->patchset.HWKext, this->patchset.HWPatch1->find, this->patchset.HWPatch1->repl,
@@ -95,12 +101,12 @@ bool NBlue::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t 
     };
     for (auto &patch : patches) {
         patcher.applyLookupPatch(&patch);
-        SYSLOG_COND(patcher.getError() != KernelPatcher::Error::NoError, "igt1f", "Failed to apply %c patch: %d",
+        SYSLOG_COND(patcher.getError() != KernelPatcher::Error::NoError, "nblue", "Failed to apply %c patch: %d",
             this->patchset.MiscNames->hw, patcher.getError());
         patcher.clearError();
     }
 
-    DBGLOG("igt1f", "Applying patches for %c for OS version %c", callback->patchset.MiscNames->mtl,
+    DBGLOG("nblue", "Applying patches for %c for OS version %c", callback->patchset.MiscNames->mtl,
         this->patchset.MiscNames->os);
 
     lilu.onProcLoadForce(this->patchset.MTLProcInfo, 1, nullptr, nullptr, this->patchset.MTLPatch1, 1);
@@ -112,7 +118,7 @@ bool NBlue::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t 
 
     // argument here for debugging since VA isn't critical for operations
     if (!checkKernelArgument("-patchbundlesoff")) {
-        DBGLOG("igt1f", "Applying patches for %c", this->patchset.MiscNames->va);
+        DBGLOG("nblue", "Applying patches for %c", this->patchset.MiscNames->va);
         lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch1, 1);
         lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch2, 1);
         lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch3, 1);
@@ -134,7 +140,7 @@ void NBlue::csValidatePage(vnode *vp, memory_object_t pager, memory_object_offse
         if (UNLIKELY(UserPatcher::matchSharedCachePath(path))) {
             if (callback->igfxGen == iGFXGen::Haswell) {
                 if (callback->kVer == 20) {
-                    DBGLOG("igt1f", "Placeholder code for the future, usually this is when we would start patching "
+                    DBGLOG("nblue", "Placeholder code for the future, usually this is when we would start patching "
                                     "bundles from the dyld cache");
                 }
             }
