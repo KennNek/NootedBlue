@@ -28,7 +28,7 @@ void NBlue::init() {
         },
         this);
     gen8.init();
-	gen9.init();
+    gen9.init();
     hsw.init();
 }
 
@@ -36,6 +36,9 @@ void NBlue::processPatcher(KernelPatcher &patcher) {
     auto *devInfo = DeviceInfo::create();
     if (devInfo) {
         devInfo->processSwitchOff();
+
+        this->iGPU = OSDynamicCast(IOPCIDevice, devInfo->videoBuiltin);
+        PANIC_COND(!this->iGPU, "nblue", "videoBuiltin is not IOPCIDevice");
 
         WIOKit::renameDevice(this->iGPU, "IGPU");
         WIOKit::awaitPublishing(this->iGPU);

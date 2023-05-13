@@ -23,7 +23,6 @@ void Gen8::init() {
 
 bool Gen8::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
     if (kextG8FB.loadIndex == index) {
-		
         NBlue::callback->igfxGen = iGFXGen::Gen8;
 
         NBlue::callback->patchset.MiscNames->fb = "AppleIntelBDWGraphicsFramebuffer";

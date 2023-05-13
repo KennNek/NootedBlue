@@ -5,8 +5,8 @@
 #include "kern_nblue.hpp"
 #include <Headers/kern_api.hpp>
 
-static const char *pathG11FB =
-    "/System/Library/Extensions/AppleIntelICLLPGraphicsFramebuffer.kext/Contents/MacOS/AppleIntelICLLPGraphicsFramebuffer";
+static const char *pathG11FB = "/System/Library/Extensions/AppleIntelICLLPGraphicsFramebuffer.kext/Contents/MacOS/"
+                               "AppleIntelICLLPGraphicsFramebuffer";
 static const char *pathG11HW =
     "/System/Library/Extensions/AppleIntelICLGraphics.kext/Contents/MacOS/AppleIntelICLGraphics";
 
@@ -23,7 +23,6 @@ void Gen11::init() {
 
 bool Gen11::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
     if (kextG11FB.loadIndex == index) {
-		
         NBlue::callback->igfxGen = iGFXGen::Gen8;
 
         NBlue::callback->patchset.MiscNames->fb = "AppleIntelICLLPGraphicsFramebuffer";

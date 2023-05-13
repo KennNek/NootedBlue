@@ -4,19 +4,20 @@
 #ifndef kern_igt1f_hpp
 #define kern_igt1f_hpp
 #include "kern_gen8.hpp"
-#include "kern_hsw.hpp"
 #include "kern_gen9.hpp"
+#include "kern_hsw.hpp"
 #include <Headers/kern_patcher.hpp>
 #include <Headers/kern_user.hpp>
 #include <Headers/kern_util.hpp>
 #include <IOKit/pci/IOPCIDevice.h>
 
 enum struct iGFXGen {
-    Haswell,  // Haswell had no lower end rebrands, so it gets it's name plastered here
-    Gen8,     // Broadwell & Braswell/Cherryview
-    Gen9,     // Skylake & Apollo Lake
-    Gen9_5,   // Coffee Lake, Comet Lake, Gemini Lake, Kaby Lake
-    Gen11,    // Ice Lake kexts support G1 with device-id spoofs, this, however, is inconvenient, also Elkhart/Jasper Lake exist, pain.
+    Haswell,    // Haswell had no lower end rebrands, so it gets it's name plastered here
+    Gen8,       // Broadwell & Braswell/Cherryview
+    Gen9,       // Skylake & Apollo Lake
+    Gen9_5,     // Coffee Lake, Comet Lake, Gemini Lake, Kaby Lake
+    Gen11,      // Ice Lake kexts support G1 with device-id spoofs, this, however, is inconvenient, also Elkhart/Jasper
+                // Lake exist, pain.
     Unknown,
 };
 
@@ -59,10 +60,10 @@ struct Patchset {
 
 class NBlue {
     friend class Gen8;
-	friend class Gen9;
-	friend class Gen9_5;
-	friend class Gen11;
-	friend class HSW;
+    friend class Gen9;
+    friend class Gen9_5;
+    friend class Gen11;
+    friend class HSW;
 
     public:
     static NBlue *callback;
@@ -73,8 +74,8 @@ class NBlue {
     Patchset patchset;
 
     private:
-	bool isCflDerivative = false;
-	bool disableAllPatches = false;
+    bool isCflDerivative = false;
+    bool disableAllPatches = false;
     int kVer {0};
     iGFXGen igfxGen = iGFXGen::Unknown;
     uint32_t deviceId {0};

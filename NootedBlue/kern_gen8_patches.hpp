@@ -10,9 +10,9 @@
  */
 
 static const char kGen8MTLDriverPath[] = "/System/Library/Extensions/AppleIntelBDWGraphicsMTLDriver.bundle/Contents/"
-                                        "MacOS/AppleIntelBDWGraphicsMTLDriver";
+                                         "MacOS/AppleIntelBDWGraphicsMTLDriver";
 static const char kGen8VADriverPath[] = "/System/Library/Extensions/AppleIntelBDWGraphicsVADriver.bundle/Contents/"
-                                       "MacOS/AppleIntelBDWGraphicsVADriver";
+                                        "MacOS/AppleIntelBDWGraphicsVADriver";
 /**
  * `Braswell & Broadwell Patch Set for Mojave`
  *  In active development
@@ -30,11 +30,12 @@ enum : uint32_t {
 };
 
 static uint32_t kGen8MTLLength = sizeof("/System/Library/Extensions/AppleIntelGen8GraphicsMTLDriver.bundle/Contents/"
-                                       "MacOS/AppleIntelBDWGraphicsMTLDriver") -
-                                1;
-static uint32_t kGen8VALength = sizeof("/System/Library/Extensions/AppleIntelGen8GraphicsVADriver.bundle/Contents/MacOS/"
-                                      "AppleIntelBDWGraphicsVADriver") -
-                               1;
+                                        "MacOS/AppleIntelBDWGraphicsMTLDriver") -
+                                 1;
+static uint32_t kGen8VALength =
+    sizeof("/System/Library/Extensions/AppleIntelGen8GraphicsVADriver.bundle/Contents/MacOS/"
+           "AppleIntelBDWGraphicsVADriver") -
+    1;
 
 static UserPatcher::ProcInfo kProcInfoGen8MTL {kGen8MTLDriverPath, kGen8MTLLength, Gen8MTL};
 static UserPatcher::ProcInfo kProcInfoGen8VA {kGen8VADriverPath, kGen8VALength, Gen8VA};

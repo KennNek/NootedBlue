@@ -27,14 +27,14 @@ bool Gen9::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t a
         return true;
     } else if (kextG9HW.loadIndex == index) {
         DBGLOG("gen9", "Loaded AppleIntelSKGraphics!");
-		
-		NBlue::callback->igfxGen = iGFXGen::Gen9;
 
-		NBlue::callback->patchset.MiscNames->fb = "AppleIntelSKLGraphicsFramebuffer";
-		NBlue::callback->patchset.MiscNames->hw = "AppleIntelSKLGraphics";
-		NBlue::callback->patchset.MiscNames->mtl = "AppleIntelSKLGraphicsMTLDriver";
-		NBlue::callback->patchset.MiscNames->va = "AppleIntelSKLGraphicsVADriver";
-		
+        NBlue::callback->igfxGen = iGFXGen::Gen9;
+
+        NBlue::callback->patchset.MiscNames->fb = "AppleIntelSKLGraphicsFramebuffer";
+        NBlue::callback->patchset.MiscNames->hw = "AppleIntelSKLGraphics";
+        NBlue::callback->patchset.MiscNames->mtl = "AppleIntelSKLGraphicsMTLDriver";
+        NBlue::callback->patchset.MiscNames->va = "AppleIntelSKLGraphicsVADriver";
+
         return true;
     }
 
