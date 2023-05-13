@@ -210,7 +210,7 @@
 			dependencies = (
 			);
 			name = NootedBlue;
-			productName = IntelGT1Fixup;
+			productName = NootedBlue;
 			productReference = 1C748C271C21952C0024EED2 /* NootedBlue.kext */;
 			productType = "com.apple.product-type.kernel-extension";
 		};
@@ -260,7 +260,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(PROJECT_DIR)/IntelGT1Fixup/kern_fw.cpp",
+				"$(PROJECT_DIR)/NootedBlue/kern_fw.cpp",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -449,13 +449,13 @@
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = IntelGT1Fixup/Info.plist;
+				INFOPLIST_FILE = NootedBlue/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MODULE_NAME = com.ZormIndustries.IntelGT1Fixup;
+				MODULE_NAME = com.ZormIndustries.NootedBlue;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
 				MODULE_VERSION = 1.0.0;
@@ -476,7 +476,7 @@
 					"$(inherited)",
 				);
 				OTHER_LDFLAGS = "-static";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ZormIndustries.IntelGT1Fixup;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ZormIndustries.NootedBlue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				WRAPPER_EXTENSION = kext;
@@ -501,14 +501,14 @@
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = IntelGT1Fixup/Info.plist;
+				INFOPLIST_FILE = NootedBlue/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
 				LLVM_LTO = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MODULE_NAME = com.ZormIndustries.IntelGT1Fixup;
+				MODULE_NAME = com.ZormIndustries.NootedBlue;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
 				MODULE_VERSION = 1.0.0;
@@ -529,7 +529,7 @@
 					"$(inherited)",
 				);
 				OTHER_LDFLAGS = "-static";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ZormIndustries.IntelGT1Fixup;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ZormIndustries.NootedBlue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRIP_STYLE = "non-global";
 				WRAPPER_EXTENSION = kext;
@@ -615,13 +615,13 @@
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
-				INFOPLIST_FILE = IntelGT1Fixup/Info.plist;
+				INFOPLIST_FILE = NootedBlue/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				MODULE_NAME = com.ZormIndustries.IntelGT1Fixup;
+				MODULE_NAME = com.ZormIndustries.NootedBlue;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
 				MODULE_VERSION = 1.0.0;
@@ -644,7 +644,7 @@
 					"$(inherited)",
 				);
 				OTHER_LDFLAGS = "-static";
-				PRODUCT_BUNDLE_IDENTIFIER = com.ZormIndustries.IntelGT1Fixup;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ZormIndustries.NootedBlue;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = kext;
 			};
