@@ -10,17 +10,21 @@
 		CE405ED91E4A080700AA0B3D /* plugin_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CE405ED81E4A080700AA0B3D /* plugin_start.cpp */; };
 		CE8DA0832517C41A008C44E8 /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CE8DA0822517C41A008C44E8 /* libkmod.a */; };
 		F009B7A129E4EE3C00786AFF /* kern_start.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A029E4EE3C00786AFF /* kern_start.cpp */; };
-		F009B7A329E4EEBA00786AFF /* kern_igt1f.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A229E4EEBA00786AFF /* kern_igt1f.cpp */; };
+		F009B7A329E4EEBA00786AFF /* kern_nblue.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A229E4EEBA00786AFF /* kern_nblue.cpp */; };
 		F009B7A529E4EEC300786AFF /* kern_hsw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A429E4EEC300786AFF /* kern_hsw.cpp */; };
-		F009B7A829E4FC6300786AFF /* kern_bdw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A629E4FC6300786AFF /* kern_bdw.cpp */; };
-		F009B7A929E4FC6300786AFF /* kern_bdw.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F009B7A729E4FC6300786AFF /* kern_bdw.hpp */; };
-		F009B7B029E505C600786AFF /* kern_skl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7AE29E505C600786AFF /* kern_skl.cpp */; };
-		F009B7B129E505C600786AFF /* kern_skl.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F009B7AF29E505C600786AFF /* kern_skl.hpp */; };
+		F009B7A829E4FC6300786AFF /* kern_gen8.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7A629E4FC6300786AFF /* kern_gen8.cpp */; };
+		F009B7A929E4FC6300786AFF /* kern_gen8.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F009B7A729E4FC6300786AFF /* kern_gen8.hpp */; };
+		F009B7B029E505C600786AFF /* kern_gen9.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F009B7AE29E505C600786AFF /* kern_gen9.cpp */; };
+		F009B7B129E505C600786AFF /* kern_gen9.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F009B7AF29E505C600786AFF /* kern_gen9.hpp */; };
 		F067C21A29D82E59004BB52E /* kern_hsw.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F067C20A29D82E58004BB52E /* kern_hsw.hpp */; };
 		F067C22629D84710004BB52E /* (null) in Sources */ = {isa = PBXBuildFile; };
+		F0AF08BB2A0F373F00B63C2B /* kern_gen11.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0AF08B92A0F373F00B63C2B /* kern_gen11.cpp */; };
+		F0AF08BC2A0F373F00B63C2B /* kern_gen11.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0AF08BA2A0F373F00B63C2B /* kern_gen11.hpp */; };
 		F0B49E9529D93A600067BE5B /* (null) in Headers */ = {isa = PBXBuildFile; };
 		F0B49E9629D93A600067BE5B /* (null) in Sources */ = {isa = PBXBuildFile; };
-		F0D691DB2A07800100CCC481 /* kern_bdw_patches.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0D691DA2A07800000CCC481 /* kern_bdw_patches.hpp */; };
+		F0BB3C432A0AFDEA00429BDB /* kern_gen9_5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BB3C412A0AFDEA00429BDB /* kern_gen9_5.cpp */; };
+		F0BB3C442A0AFDEA00429BDB /* kern_gen9_5.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0BB3C422A0AFDEA00429BDB /* kern_gen9_5.hpp */; };
+		F0D691DB2A07800100CCC481 /* kern_gen8_patches.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0D691DA2A07800000CCC481 /* kern_gen8_patches.hpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -37,7 +41,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1C748C271C21952C0024EED2 /* IntelGT1Fixup.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntelGT1Fixup.kext; sourceTree = BUILT_PRODUCTS_DIR; };
+		1C748C271C21952C0024EED2 /* NootedBlue.kext */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NootedBlue.kext; sourceTree = BUILT_PRODUCTS_DIR; };
 		1C748C2E1C21952C0024EED2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CE405EBA1E49DD7100AA0B3D /* kern_compression.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = kern_compression.hpp; sourceTree = "<group>"; };
 		CE405EBB1E49DD7100AA0B3D /* kern_disasm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = kern_disasm.hpp; sourceTree = "<group>"; };
@@ -54,16 +58,20 @@
 		CE405EDA1E4A080F00AA0B3D /* plugin_start.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = plugin_start.hpp; sourceTree = "<group>"; };
 		CE8DA0822517C41A008C44E8 /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = ../Lilu/MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
 		F009B7A029E4EE3C00786AFF /* kern_start.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kern_start.cpp; sourceTree = "<group>"; };
-		F009B7A229E4EEBA00786AFF /* kern_igt1f.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_igt1f.cpp; sourceTree = "<group>"; };
+		F009B7A229E4EEBA00786AFF /* kern_nblue.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_nblue.cpp; sourceTree = "<group>"; };
 		F009B7A429E4EEC300786AFF /* kern_hsw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_hsw.cpp; sourceTree = "<group>"; };
-		F009B7A629E4FC6300786AFF /* kern_bdw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_bdw.cpp; sourceTree = "<group>"; };
-		F009B7A729E4FC6300786AFF /* kern_bdw.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_bdw.hpp; sourceTree = "<group>"; };
-		F009B7AE29E505C600786AFF /* kern_skl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_skl.cpp; sourceTree = "<group>"; };
-		F009B7AF29E505C600786AFF /* kern_skl.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_skl.hpp; sourceTree = "<group>"; };
-		F067C20329D82E57004BB52E /* kern_igt1f.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_igt1f.hpp; sourceTree = "<group>"; };
+		F009B7A629E4FC6300786AFF /* kern_gen8.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_gen8.cpp; sourceTree = "<group>"; };
+		F009B7A729E4FC6300786AFF /* kern_gen8.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_gen8.hpp; sourceTree = "<group>"; };
+		F009B7AE29E505C600786AFF /* kern_gen9.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_gen9.cpp; sourceTree = "<group>"; };
+		F009B7AF29E505C600786AFF /* kern_gen9.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_gen9.hpp; sourceTree = "<group>"; };
+		F067C20329D82E57004BB52E /* kern_nblue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_nblue.hpp; sourceTree = "<group>"; };
 		F067C20A29D82E58004BB52E /* kern_hsw.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_hsw.hpp; sourceTree = "<group>"; };
 		F067C21129D82E58004BB52E /* kern_hsw_patches.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_hsw_patches.hpp; sourceTree = "<group>"; };
-		F0D691DA2A07800000CCC481 /* kern_bdw_patches.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_bdw_patches.hpp; sourceTree = "<group>"; };
+		F0AF08B92A0F373F00B63C2B /* kern_gen11.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_gen11.cpp; sourceTree = "<group>"; };
+		F0AF08BA2A0F373F00B63C2B /* kern_gen11.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_gen11.hpp; sourceTree = "<group>"; };
+		F0BB3C412A0AFDEA00429BDB /* kern_gen9_5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_gen9_5.cpp; sourceTree = "<group>"; };
+		F0BB3C422A0AFDEA00429BDB /* kern_gen9_5.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_gen9_5.hpp; sourceTree = "<group>"; };
+		F0D691DA2A07800000CCC481 /* kern_gen8_patches.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_gen8_patches.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +89,7 @@
 		1C748C1D1C21952C0024EED2 = {
 			isa = PBXGroup;
 			children = (
-				1C748C291C21952C0024EED2 /* IntelGT1Fixup */,
+				1C748C291C21952C0024EED2 /* NootedBlue */,
 				CE405EC81E49DD7B00AA0B3D /* SDK */,
 				1C748C281C21952C0024EED2 /* Products */,
 				CE8DA0812517C41A008C44E8 /* Frameworks */,
@@ -92,28 +100,32 @@
 		1C748C281C21952C0024EED2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1C748C271C21952C0024EED2 /* IntelGT1Fixup.kext */,
+				1C748C271C21952C0024EED2 /* NootedBlue.kext */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1C748C291C21952C0024EED2 /* IntelGT1Fixup */ = {
+		1C748C291C21952C0024EED2 /* NootedBlue */ = {
 			isa = PBXGroup;
 			children = (
 				1C748C2E1C21952C0024EED2 /* Info.plist */,
-				F009B7A229E4EEBA00786AFF /* kern_igt1f.cpp */,
-				F067C20329D82E57004BB52E /* kern_igt1f.hpp */,
-				F009B7A629E4FC6300786AFF /* kern_bdw.cpp */,
-				F009B7A729E4FC6300786AFF /* kern_bdw.hpp */,
-				F0D691DA2A07800000CCC481 /* kern_bdw_patches.hpp */,
+				F009B7A629E4FC6300786AFF /* kern_gen8.cpp */,
+				F009B7A729E4FC6300786AFF /* kern_gen8.hpp */,
+				F0D691DA2A07800000CCC481 /* kern_gen8_patches.hpp */,
+				F009B7AE29E505C600786AFF /* kern_gen9.cpp */,
+				F009B7AF29E505C600786AFF /* kern_gen9.hpp */,
+				F0BB3C412A0AFDEA00429BDB /* kern_gen9_5.cpp */,
+				F0BB3C422A0AFDEA00429BDB /* kern_gen9_5.hpp */,
+				F0AF08B92A0F373F00B63C2B /* kern_gen11.cpp */,
+				F0AF08BA2A0F373F00B63C2B /* kern_gen11.hpp */,
 				F009B7A429E4EEC300786AFF /* kern_hsw.cpp */,
 				F067C20A29D82E58004BB52E /* kern_hsw.hpp */,
 				F067C21129D82E58004BB52E /* kern_hsw_patches.hpp */,
-				F009B7AE29E505C600786AFF /* kern_skl.cpp */,
-				F009B7AF29E505C600786AFF /* kern_skl.hpp */,
+				F009B7A229E4EEBA00786AFF /* kern_nblue.cpp */,
+				F067C20329D82E57004BB52E /* kern_nblue.hpp */,
 				F009B7A029E4EE3C00786AFF /* kern_start.cpp */,
 			);
-			path = IntelGT1Fixup;
+			path = NootedBlue;
 			sourceTree = "<group>";
 		};
 		CE405EB91E49DD7100AA0B3D /* Headers */ = {
@@ -169,20 +181,22 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0AF08BC2A0F373F00B63C2B /* kern_gen11.hpp in Headers */,
 				F067C21A29D82E59004BB52E /* kern_hsw.hpp in Headers */,
-				F009B7A929E4FC6300786AFF /* kern_bdw.hpp in Headers */,
-				F009B7B129E505C600786AFF /* kern_skl.hpp in Headers */,
+				F009B7A929E4FC6300786AFF /* kern_gen8.hpp in Headers */,
+				F009B7B129E505C600786AFF /* kern_gen9.hpp in Headers */,
+				F0BB3C442A0AFDEA00429BDB /* kern_gen9_5.hpp in Headers */,
 				F0B49E9529D93A600067BE5B /* (null) in Headers */,
-				F0D691DB2A07800100CCC481 /* kern_bdw_patches.hpp in Headers */,
+				F0D691DB2A07800100CCC481 /* kern_gen8_patches.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		1C748C261C21952C0024EED2 /* IntelGT1Fixup */ = {
+		1C748C261C21952C0024EED2 /* NootedBlue */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1C748C311C21952C0024EED2 /* Build configuration list for PBXNativeTarget "IntelGT1Fixup" */;
+			buildConfigurationList = 1C748C311C21952C0024EED2 /* Build configuration list for PBXNativeTarget "NootedBlue" */;
 			buildPhases = (
 				408F2028288ACCC6002EEC15 /* ShellScript */,
 				1C748C221C21952C0024EED2 /* Sources */,
@@ -195,9 +209,9 @@
 			);
 			dependencies = (
 			);
-			name = IntelGT1Fixup;
+			name = NootedBlue;
 			productName = IntelGT1Fixup;
-			productReference = 1C748C271C21952C0024EED2 /* IntelGT1Fixup.kext */;
+			productReference = 1C748C271C21952C0024EED2 /* NootedBlue.kext */;
 			productType = "com.apple.product-type.kernel-extension";
 		};
 /* End PBXNativeTarget section */
@@ -214,7 +228,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1C748C211C21952C0024EED2 /* Build configuration list for PBXProject "IntelGT1Fixup" */;
+			buildConfigurationList = 1C748C211C21952C0024EED2 /* Build configuration list for PBXProject "NootedBlue" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -227,7 +241,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1C748C261C21952C0024EED2 /* IntelGT1Fixup */,
+				1C748C261C21952C0024EED2 /* NootedBlue */,
 			);
 		};
 /* End PBXProject section */
@@ -274,13 +288,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F009B7B029E505C600786AFF /* kern_skl.cpp in Sources */,
+				F009B7B029E505C600786AFF /* kern_gen9.cpp in Sources */,
 				F009B7A529E4EEC300786AFF /* kern_hsw.cpp in Sources */,
 				F009B7A129E4EE3C00786AFF /* kern_start.cpp in Sources */,
 				F067C22629D84710004BB52E /* (null) in Sources */,
-				F009B7A829E4FC6300786AFF /* kern_bdw.cpp in Sources */,
-				F009B7A329E4EEBA00786AFF /* kern_igt1f.cpp in Sources */,
+				F009B7A829E4FC6300786AFF /* kern_gen8.cpp in Sources */,
+				F009B7A329E4EEBA00786AFF /* kern_nblue.cpp in Sources */,
+				F0BB3C432A0AFDEA00429BDB /* kern_gen9_5.cpp in Sources */,
 				F0B49E9629D93A600067BE5B /* (null) in Sources */,
+				F0AF08BB2A0F373F00B63C2B /* kern_gen11.cpp in Sources */,
 				CE405ED91E4A080700AA0B3D /* plugin_start.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -637,7 +653,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1C748C211C21952C0024EED2 /* Build configuration list for PBXProject "IntelGT1Fixup" */ = {
+		1C748C211C21952C0024EED2 /* Build configuration list for PBXProject "NootedBlue" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1C748C2F1C21952C0024EED2 /* Debug */,
@@ -647,7 +663,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1C748C311C21952C0024EED2 /* Build configuration list for PBXNativeTarget "IntelGT1Fixup" */ = {
+		1C748C311C21952C0024EED2 /* Build configuration list for PBXNativeTarget "NootedBlue" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1C748C321C21952C0024EED2 /* Debug */,

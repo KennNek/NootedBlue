@@ -1,37 +1,38 @@
 //  Copyright © 2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
 //  details.
 
-#include "kern_igt1f.hpp"
-#include "kern_bdw.hpp"
+#include "kern_nblue.hpp"
+#include "kern_gen8.hpp"
+#include "kern_gen9.hpp"
+#include "kern_gen9_5.hpp"
 #include "kern_hsw.hpp"
-#include "kern_hsw_patches.hpp"
-#include "kern_skl.hpp"
 #include <Headers/kern_api.hpp>
 #include <Headers/kern_devinfo.hpp>
 #include <Headers/kern_util.hpp>
 
-IGT1F *IGT1F::callback = nullptr;
+NBlue *NBlue::callback = nullptr;
 
-static BDW bdw;
+static Gen8 gen8;
+static Gen9 gen9;
+static Gen9_5 gen9_5;
 static HSW hsw;
-static SKL skl;
 
-void IGT1F::init() {
+void NBlue::init() {
     callback = this;
     lilu.onPatcherLoadForce(
-        [](void *user, KernelPatcher &patcher) { static_cast<IGT1F *>(user)->processPatcher(patcher); }, this);
+        [](void *user, KernelPatcher &patcher) { static_cast<NBlue *>(user)->processPatcher(patcher); }, this);
     lilu.onKextLoadForce(
         nullptr, 0,
         [](void *user, KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
-            static_cast<IGT1F *>(user)->processKext(patcher, index, address, size);
+            static_cast<NBlue *>(user)->processKext(patcher, index, address, size);
         },
         this);
-    bdw.init();
+    gen8.init();
+	gen9.init();
     hsw.init();
-    skl.init();
 }
 
-void IGT1F::processPatcher(KernelPatcher &patcher) {
+void NBlue::processPatcher(KernelPatcher &patcher) {
     auto *devInfo = DeviceInfo::create();
     if (devInfo) {
         devInfo->processSwitchOff();
@@ -70,12 +71,12 @@ void IGT1F::processPatcher(KernelPatcher &patcher) {
     }
 }
 
-bool IGT1F::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
+bool NBlue::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
     if (hsw.configurePatches(index)) {
         DBGLOG("igt1f", "Applied Haswell configuration");
-    } else if (bdw.processKext(patcher, index, address, size)) {
-        DBGLOG("igt1f", "Applied Braswelll configuration");
-    } else if (skl.processKext(patcher, index, address, size)) {
+    } else if (gen8.processKext(patcher, index, address, size)) {
+        DBGLOG("igt1f", "Applied Generation 8 configuration");
+    } else if (gen9.processKext(patcher, index, address, size)) {
         DBGLOG("igt1f", "Applied Skylake/Apollo Lake configuration");
     }
 
@@ -119,7 +120,7 @@ bool IGT1F::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t 
     return true;
 }
 
-void IGT1F::csValidatePage(vnode *vp, memory_object_t pager, memory_object_offset_t page_offset, const void *data,
+void NBlue::csValidatePage(vnode *vp, memory_object_t pager, memory_object_offset_t page_offset, const void *data,
     int *validated_p, int *tainted_p, int *nx_p) {
     FunctionCast(csValidatePage, callback->orgCsValidatePage)(vp, pager, page_offset, data, validated_p, tainted_p,
         nx_p);

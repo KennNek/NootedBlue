@@ -1,16 +1,16 @@
 //  Copyright © 2023 ChefKiss Inc. Licensed under the Thou Shalt Not Profit License version 1.0. See LICENSE for
 //  details.
 
-#ifndef kern_skl_hpp
-#define kern_skl_hpp
+#ifndef kern_gen11_hpp
+#define kern_gen11_hpp
 #include <Headers/kern_patcher.hpp>
 #include <Headers/kern_util.hpp>
 
-class SKL {
+class Gen11 {
     public:
-    static SKL *callback;
+    static Gen11 *callback;
     void init();
     bool processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
 };
 
-#endif /* kern_hsw_hpp */
+#endif /* kern_gen8_hpp */
