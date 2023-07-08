@@ -31,6 +31,7 @@ void NBlue::init() {
         },
         this);
     gen8.init();
+    gen9_5.init()
     gen9.init();
     gen11.init();
     hsw.init();
@@ -60,10 +61,6 @@ void NBlue::processPatcher(KernelPatcher &patcher) {
         this->iGPU->setProperty("built-in", builtin, arrsize(builtin));
         this->deviceId = WIOKit::readPCIConfigValue(this->iGPU, WIOKit::kIOPCIConfigDeviceID);
         this->pciRevision = WIOKit::readPCIConfigValue(NBlue::callback->iGPU, WIOKit::kIOPCIConfigRevisionID);
-
-        // Why init here rather than earlier? Because we need the Device ID for proper Gen 9.5 initialisation due to the
-        // fact that Apple uses AIKBL* for CFL
-        gen9_5.init();
 
         DeviceInfo::deleter(devInfo);
     } else {
