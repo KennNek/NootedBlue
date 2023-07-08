@@ -4,7 +4,11 @@
 #include "kern_hsw.hpp"
 #include "kern_hsw_patches.hpp"
 #include "kern_nblue.hpp"
+#include "kern_patcherplus.hpp"
 #include <Headers/kern_api.hpp>
+#include <string.h>
+#include <sys/sysctl.h>
+#include <sys/types.h>
 
 static const char *pathHSWFB =
     "/System/Library/Extensions/AppleIntelFramebufferAzul.kext/Contents/MacOS/AppleIntelFramebufferAzul";
@@ -19,92 +23,78 @@ static KernelPatcher::KextInfo kextHSWHW {"com.apple.driver.AppleIntelHD5000Grap
 NBlue nblue;
 
 void HSW::init() {
-    callback = this;
     lilu.onKextLoadForce(&kextHSWFB);
     lilu.onKextLoadForce(&kextHSWHW);
 }
-
-bool HSW::configurePatches(size_t index) {
+bool HSW::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
     if (kextHSWHW.loadIndex == index) {
         NBlue::callback->igfxGen = iGFXGen::Haswell;
 
-        NBlue::callback->patchset.MiscNames->fb = "AppleIntelFramebufferAzul";
-        NBlue::callback->patchset.MiscNames->hw = "AppleIntelHD5000Graphics";
-        NBlue::callback->patchset.MiscNames->mtl = "AppleIntelHD5000GraphicsMTLDriver";
+        switch (getKernelVersion()) {
+            case KernelVersion::Sierra: {
+                DBGLOG("hsw", "Applying Sierra patches!");
 
-        NBlue::callback->patchset.MTLProcInfo = &kHSWMTLProcInfo;
-        NBlue::callback->patchset.VAProcInfo = &kHSWVAProcInfo;
+                LookupPatchPlus const patches[] = {
+                    {&kextHSWHW, kHSWHWSierra1Original, kHSWHWSierra1Patched, arrsize(kHSWHWSierra1Original), 1},
+                    {&kextHSWHW, kHSWHWSierra2Original, kHSWHWSierra2Patched, arrsize(kHSWHWSierra2Original), 1},
+                    {&kextHSWHW, kHSWHWSierra3Original, kHSWHWSierra3Patched, arrsize(kHSWHWSierra3Original), 1},
+                    {&kextHSWHW, kHSWHWSierra4Original, kHSWHWSierra4Patched, arrsize(kHSWHWSierra4Original), 1},
+                };
 
-        if (NBlue::callback->kVer == 16) {
-            DBGLOG("hsw", "Configuring patchset for Sierra");
+                PANIC_COND(!LookupPatchPlus::applyAll(&patcher, patches, address, size), "hsw",
+                    "Failed to apply patches: %d", patcher.getError());
 
-            NBlue::callback->patchset.MiscNames->os = "Sierra";
+                lilu.onProcLoadForce(kHSWProcInfo, 2, nullptr, nullptr, kHSWBinaryModSierra, 2);
 
-            DBGLOG("hsw", "Setting patches for HD5000Graphics...");
+                break;
+            }
+            case KernelVersion::HighSierra: {
+                DBGLOG("hsw", "Applying High Sierra patches!");
 
-            NBlue::callback->patchset.HWPatch1->find = kHSWHWProbeSierra1Original;
-            NBlue::callback->patchset.HWPatch1->repl = kHSWHWProbeSierra1Patched;
-            NBlue::callback->patchset.HWPatch1->arrsize = arrsize(kHSWHWProbeSierra1Original);
-            NBlue::callback->patchset.HWPatch2->find = kHSWHWProbeSierra2Original;
-            NBlue::callback->patchset.HWPatch2->repl = kHSWHWProbeSierra2Patched;
-            NBlue::callback->patchset.HWPatch2->arrsize = arrsize(kHSWHWProbeSierra2Original);
-            NBlue::callback->patchset.HWPatch3->find = kHSWHWProbeSierra3Original;
-            NBlue::callback->patchset.HWPatch3->repl = kHSWHWProbeSierra3Patched;
-            NBlue::callback->patchset.HWPatch3->arrsize = arrsize(kHSWHWProbeSierra3Original);
-            NBlue::callback->patchset.HWPatch4->find = kHSWHWProbeSierra4Original;
-            NBlue::callback->patchset.HWPatch4->repl = kHSWHWProbeSierra4Patched;
-            NBlue::callback->patchset.HWPatch4->arrsize = arrsize(kHSWHWProbeSierra4Original);
+                LookupPatchPlus const patches[] = {
+                    {&kextHSWHW, kHSWHWHS1Original, kHSWHWHS1Patched, arrsize(kHSWHWHS1Original), 1},
+                    {&kextHSWHW, kHSWHWHS2Original, kHSWHWHS2Patched, arrsize(kHSWHWHS2Original), 1},
+                    {&kextHSWHW, kHSWHWHS3Original, kHSWHWHS3Patched, arrsize(kHSWHWHS3Original), 1},
+                    {&kextHSWHW, kHSWHWHS4Original, kHSWHWHS4Patched, arrsize(kHSWHWHS4Original), 1},
+                };
 
-            DBGLOG("hsw", "Setting patches for MTLDriver...");
+                PANIC_COND(!LookupPatchPlus::applyAll(&patcher, patches, address, size), "hsw",
+                    "Failed to apply patches: %d", patcher.getError());
 
-            NBlue::callback->patchset.MTLPatch1 = &kBinModInfoHSWMTLSierra1;
-            NBlue::callback->patchset.MTLPatch2 = &kBinModInfoHSWMTLSierra2;
+                lilu.onProcLoadForce(kHSWProcInfo, 2, nullptr, nullptr, kHSWBinaryModHS, 2);
 
-            DBGLOG("hsw", "Setting patches for VADriver...");
+                break;
+            }
+            case KernelVersion::Mojave: {
+                // Thanks Apple.
+                // We don't enable this on any other version since softwareupdate pushes people to download & install
+                // 2021-005 it would also take a while to figure out what specific BN has this change
+                char osversion[40] = {};
+                size_t size = sizeof(osversion);
+                sysctlbyname("kern.osversion", osversion, &size, NULL, 0);
+                auto needsOtherPatch = (strcmp(osversion, "18G9323") != 0);
+                DBGLOG("hsw", "Current Mojave version: %c", osversion);
 
-            NBlue::callback->patchset.VAPatch1 = &kBinModInfoHSWVASierra1;
-            NBlue::callback->patchset.VAPatch2 = &kBinModInfoHSWVASierra2;
-            NBlue::callback->patchset.VAPatch3 = &kBinModInfoHSWVASierra3;
-            NBlue::callback->patchset.VAPatch4 = &kBinModInfoHSWVASierra4;
-            NBlue::callback->patchset.VAPatch5 = &kBinModInfoHSWVASierra5;
+                LookupPatchPlus const patches[] = {
+                    {&kextHSWHW, kHSWHWMojave1Original, kHSWHWMojave1Patched, arrsize(kHSWHWMojave1Original), 1},
+                    {&kextHSWHW, kHSWHWMojave2Original, kHSWHWMojave2Patched, arrsize(kHSWHWMojave2Original), 1,
+                        !needsOtherPatch},
+                    {&kextHSWHW, kHSWHWMojave101462Original, kHSWHWMojave101462Patched,
+                        arrsize(kHSWHWMojave101462Original), 1, needsOtherPatch},
+                    {&kextHSWHW, kHSWHWMojave3Original, kHSWHWMojave3Patched, arrsize(kHSWHWMojave3Original), 1},
+                    {&kextHSWHW, kHSWHWMojave4Original, kHSWHWMojave4Patched, arrsize(kHSWHWMojave4Original), 1},
+                };
 
-        } else if (NBlue::callback->kVer == 17) {
-            DBGLOG("hsw", "Applying High Sierra patchset");
+                PANIC_COND(!LookupPatchPlus::applyAll(&patcher, patches, address, size), "hsw",
+                    "Failed to apply patches: %d", patcher.getError());
 
-            NBlue::callback->patchset.HWPatch1->find = kHSWHWProbeHS1Original;
-            NBlue::callback->patchset.HWPatch1->repl = kHSWHWProbeHS1Patched;
-            NBlue::callback->patchset.HWPatch1->arrsize = arrsize(kHSWHWProbeHS1Original);
-            NBlue::callback->patchset.HWPatch2->find = kHSWHWProbeHS2Original;
-            NBlue::callback->patchset.HWPatch2->repl = kHSWHWProbeHS2Patched;
-            NBlue::callback->patchset.HWPatch2->arrsize = arrsize(kHSWHWProbeHS2Original);
-            NBlue::callback->patchset.HWPatch3->find = kHSWHWProbeHS3Original;
-            NBlue::callback->patchset.HWPatch3->repl = kHSWHWProbeHS3Patched;
-            NBlue::callback->patchset.HWPatch3->arrsize = arrsize(kHSWHWProbeHS3Original);
-            NBlue::callback->patchset.HWPatch4->find = kHSWHWProbeHS4Original;
-            NBlue::callback->patchset.HWPatch4->repl = kHSWHWProbeHS4Patched;
-            NBlue::callback->patchset.HWPatch4->arrsize = arrsize(kHSWHWProbeHS4Original);
+                break;
+            }
+            default:
+                PANIC("hsw", "Unsupported version!");
+                break;
+        }
 
-            DBGLOG("hsw", "Setting patches for MTLDriver...");
-
-            NBlue::callback->patchset.MTLPatch1 = &kBinModInfoHSWMTLHS1;
-            NBlue::callback->patchset.MTLPatch2 = &kBinModInfoHSWMTLHS2;
-
-            DBGLOG("hsw", "Setting patches for VADriver...");
-
-            NBlue::callback->patchset.VAPatch1 = &kBinModInfoHSWVAHS1;
-            NBlue::callback->patchset.VAPatch2 = &kBinModInfoHSWVAHS2;
-            NBlue::callback->patchset.VAPatch3 = &kBinModInfoHSWVAHS3;
-            NBlue::callback->patchset.VAPatch4 = &kBinModInfoHSWVAHS4;
-            NBlue::callback->patchset.VAPatch5 = &kBinModInfoHSWVAHS5;
-
-        } else if (NBlue::callback->kVer == 18) {
-            DBGLOG("hsw", "Mojave patchset unavailable! system breakage may occur!");
-        } else if (NBlue::callback->kVer == 19) {
-            DBGLOG("hsw", "Catalina patchset unavailable! system breakage may occur!");
-        } else if (NBlue::callback->kVer == 20) {
-            DBGLOG("hsw", "Big Sur patchset unavailable! system breakage may occur!");
-        };
-        DBGLOG("hsw", "Configured.");
         return true;
     }
 

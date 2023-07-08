@@ -2,7 +2,9 @@
 //  details.
 
 #include "kern_gen9_5.hpp"
+#include "kern_gen9_5_patches.hpp"
 #include "kern_nblue.hpp"
+#include "kern_patcherplus.hpp"
 #include <Headers/kern_api.hpp>
 
 static const char *pathG9_5FB =
@@ -21,15 +23,7 @@ static KernelPatcher::KextInfo kextCFLFB {"com.apple.driver.AppleIntelCFLGraphic
     KernelPatcher::KextInfo::Unloaded};
 
 void Gen9_5::init() {
-    callback = this;
-    if (NBlue::callback->deviceId == 0x3E90 || NBlue::callback->deviceId == 0x3E93 ||
-        NBlue::callback->deviceId == 0x3E99 || NBlue::callback->deviceId == 0x3E9C ||
-        NBlue::callback->deviceId == 0x3EA1 || NBlue::callback->deviceId == 0x9BA5 ||
-        NBlue::callback->deviceId == 0x9BA8 || NBlue::callback->deviceId == 0x3185 ||
-        NBlue::callback->deviceId == 0x3184) {
-        NBlue::callback->isCflDerivative = true;
-    };
-
+    lilu.onKextLoadForce(&kextCFLFB);
     lilu.onKextLoadForce(&kextG9_5FB);
     lilu.onKextLoadForce(&kextG9_5HW);
 }
@@ -37,19 +31,30 @@ void Gen9_5::init() {
 bool Gen9_5::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
     if (kextG9_5FB.loadIndex == index) {
         DBGLOG("gen9_5", "Loaded AppleIntelKBLGraphicsFramebuffer!");
-        return true;
+    } else if (kextCFLFB.loadIndex == index) {
+        NBlue::callback->isCflDerivative = true;
+        if ((NBlue::callback->deviceId == 0x3184) || (NBlue::callback->deviceId == 0x3185)) {
+            NBlue::callback->isGen9LPDerivative = true;
+        }
     } else if (kextG9_5HW.loadIndex == index) {
         DBGLOG("gen9_5", "Loaded AppleIntelKBLGraphics!");
+        // TBF, likely needs `-disablegfxfirmware`, thanks Apple.
+        switch (getKernelVersion()) {
+            case KernelVersion::Mojave: {
+                DBGLOG("gen9_5", "Using Mojave patchset");
 
-        NBlue::callback->patchset.MiscNames->fb =
-            NBlue::callback->isCflDerivative ? "AppleIntelCFLGraphicsFramebuffer" : "AppleIntelKBLGraphicsFramebuffer";
+                LookupPatchPlus const patches[] = {
+                    {&kextG9_5HW, kGen9_5HWMojave1Original, kGen9_5HWMojave1Patched, arrsize(kGen9_5HWMojave1Original),
+                        1},
+                };
 
-        NBlue::callback->igfxGen = iGFXGen::Gen9_5;
-
-        NBlue::callback->patchset.MiscNames->hw = "AppleIntelKBLGraphics";
-        NBlue::callback->patchset.MiscNames->mtl = "AppleIntelKBLGraphicsMTLDriver";
-        NBlue::callback->patchset.MiscNames->va = "AppleIntelKBLGraphicsVADriver";
-
+                PANIC_COND(!LookupPatchPlus::applyAll(&patcher, patches, address, size), "hsw",
+                    "Failed to apply patches: %d", patcher.getError());
+            }
+            default: {
+                PANIC("gen9_5", "Unsupported OS version!");
+            }
+        }
         return true;
     }
 

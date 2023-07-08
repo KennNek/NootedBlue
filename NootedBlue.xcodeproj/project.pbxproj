@@ -18,12 +18,16 @@
 		F009B7B129E505C600786AFF /* kern_gen9.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F009B7AF29E505C600786AFF /* kern_gen9.hpp */; };
 		F067C21A29D82E59004BB52E /* kern_hsw.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F067C20A29D82E58004BB52E /* kern_hsw.hpp */; };
 		F067C22629D84710004BB52E /* (null) in Sources */ = {isa = PBXBuildFile; };
+		F0A4BE552A1992CC0031D569 /* kern_gen9_5_patches.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0A4BE532A1992CB0031D569 /* kern_gen9_5_patches.hpp */; };
+		F0A4BE592A1996E40031D569 /* kern_model.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0A4BE572A1996E40031D569 /* kern_model.hpp */; };
 		F0AF08BB2A0F373F00B63C2B /* kern_gen11.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0AF08B92A0F373F00B63C2B /* kern_gen11.cpp */; };
 		F0AF08BC2A0F373F00B63C2B /* kern_gen11.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0AF08BA2A0F373F00B63C2B /* kern_gen11.hpp */; };
 		F0B49E9529D93A600067BE5B /* (null) in Headers */ = {isa = PBXBuildFile; };
 		F0B49E9629D93A600067BE5B /* (null) in Sources */ = {isa = PBXBuildFile; };
 		F0BB3C432A0AFDEA00429BDB /* kern_gen9_5.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BB3C412A0AFDEA00429BDB /* kern_gen9_5.cpp */; };
 		F0BB3C442A0AFDEA00429BDB /* kern_gen9_5.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0BB3C422A0AFDEA00429BDB /* kern_gen9_5.hpp */; };
+		F0BB9E552A57A0340081F5FA /* kern_patcherplus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F0BB9E532A57A0340081F5FA /* kern_patcherplus.cpp */; };
+		F0BB9E562A57A0340081F5FA /* kern_patcherplus.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0BB9E542A57A0340081F5FA /* kern_patcherplus.hpp */; };
 		F0D691DB2A07800100CCC481 /* kern_gen8_patches.hpp in Headers */ = {isa = PBXBuildFile; fileRef = F0D691DA2A07800000CCC481 /* kern_gen8_patches.hpp */; };
 /* End PBXBuildFile section */
 
@@ -67,10 +71,14 @@
 		F067C20329D82E57004BB52E /* kern_nblue.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_nblue.hpp; sourceTree = "<group>"; };
 		F067C20A29D82E58004BB52E /* kern_hsw.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_hsw.hpp; sourceTree = "<group>"; };
 		F067C21129D82E58004BB52E /* kern_hsw_patches.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_hsw_patches.hpp; sourceTree = "<group>"; };
+		F0A4BE532A1992CB0031D569 /* kern_gen9_5_patches.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = kern_gen9_5_patches.hpp; sourceTree = "<group>"; };
+		F0A4BE572A1996E40031D569 /* kern_model.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = kern_model.hpp; sourceTree = "<group>"; };
 		F0AF08B92A0F373F00B63C2B /* kern_gen11.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_gen11.cpp; sourceTree = "<group>"; };
 		F0AF08BA2A0F373F00B63C2B /* kern_gen11.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_gen11.hpp; sourceTree = "<group>"; };
 		F0BB3C412A0AFDEA00429BDB /* kern_gen9_5.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_gen9_5.cpp; sourceTree = "<group>"; };
 		F0BB3C422A0AFDEA00429BDB /* kern_gen9_5.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_gen9_5.hpp; sourceTree = "<group>"; };
+		F0BB9E532A57A0340081F5FA /* kern_patcherplus.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = kern_patcherplus.cpp; sourceTree = "<group>"; };
+		F0BB9E542A57A0340081F5FA /* kern_patcherplus.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_patcherplus.hpp; sourceTree = "<group>"; };
 		F0D691DA2A07800000CCC481 /* kern_gen8_patches.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = kern_gen8_patches.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -109,20 +117,24 @@
 			isa = PBXGroup;
 			children = (
 				1C748C2E1C21952C0024EED2 /* Info.plist */,
+				F0D691DA2A07800000CCC481 /* kern_gen8_patches.hpp */,
 				F009B7A629E4FC6300786AFF /* kern_gen8.cpp */,
 				F009B7A729E4FC6300786AFF /* kern_gen8.hpp */,
-				F0D691DA2A07800000CCC481 /* kern_gen8_patches.hpp */,
-				F009B7AE29E505C600786AFF /* kern_gen9.cpp */,
-				F009B7AF29E505C600786AFF /* kern_gen9.hpp */,
+				F0A4BE532A1992CB0031D569 /* kern_gen9_5_patches.hpp */,
 				F0BB3C412A0AFDEA00429BDB /* kern_gen9_5.cpp */,
 				F0BB3C422A0AFDEA00429BDB /* kern_gen9_5.hpp */,
+				F009B7AE29E505C600786AFF /* kern_gen9.cpp */,
+				F009B7AF29E505C600786AFF /* kern_gen9.hpp */,
 				F0AF08B92A0F373F00B63C2B /* kern_gen11.cpp */,
 				F0AF08BA2A0F373F00B63C2B /* kern_gen11.hpp */,
+				F067C21129D82E58004BB52E /* kern_hsw_patches.hpp */,
 				F009B7A429E4EEC300786AFF /* kern_hsw.cpp */,
 				F067C20A29D82E58004BB52E /* kern_hsw.hpp */,
-				F067C21129D82E58004BB52E /* kern_hsw_patches.hpp */,
+				F0A4BE572A1996E40031D569 /* kern_model.hpp */,
 				F009B7A229E4EEBA00786AFF /* kern_nblue.cpp */,
 				F067C20329D82E57004BB52E /* kern_nblue.hpp */,
+				F0BB9E532A57A0340081F5FA /* kern_patcherplus.cpp */,
+				F0BB9E542A57A0340081F5FA /* kern_patcherplus.hpp */,
 				F009B7A029E4EE3C00786AFF /* kern_start.cpp */,
 			);
 			path = NootedBlue;
@@ -183,10 +195,13 @@
 			files = (
 				F0AF08BC2A0F373F00B63C2B /* kern_gen11.hpp in Headers */,
 				F067C21A29D82E59004BB52E /* kern_hsw.hpp in Headers */,
+				F0A4BE552A1992CC0031D569 /* kern_gen9_5_patches.hpp in Headers */,
 				F009B7A929E4FC6300786AFF /* kern_gen8.hpp in Headers */,
 				F009B7B129E505C600786AFF /* kern_gen9.hpp in Headers */,
+				F0A4BE592A1996E40031D569 /* kern_model.hpp in Headers */,
 				F0BB3C442A0AFDEA00429BDB /* kern_gen9_5.hpp in Headers */,
 				F0B49E9529D93A600067BE5B /* (null) in Headers */,
+				F0BB9E562A57A0340081F5FA /* kern_patcherplus.hpp in Headers */,
 				F0D691DB2A07800100CCC481 /* kern_gen8_patches.hpp in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,7 +244,7 @@
 				};
 			};
 			buildConfigurationList = 1C748C211C21952C0024EED2 /* Build configuration list for PBXProject "NootedBlue" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 3.1";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -295,6 +310,7 @@
 				F009B7A829E4FC6300786AFF /* kern_gen8.cpp in Sources */,
 				F009B7A329E4EEBA00786AFF /* kern_nblue.cpp in Sources */,
 				F0BB3C432A0AFDEA00429BDB /* kern_gen9_5.cpp in Sources */,
+				F0BB9E552A57A0340081F5FA /* kern_patcherplus.cpp in Sources */,
 				F0B49E9629D93A600067BE5B /* (null) in Sources */,
 				F0AF08BB2A0F373F00B63C2B /* kern_gen11.cpp in Sources */,
 				CE405ED91E4A080700AA0B3D /* plugin_start.cpp in Sources */,
@@ -446,6 +462,7 @@
 					"MODULE_VERSION=$(MODULE_VERSION)",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
 					"APPLE_KEXT_ASSERTIONS=1",
+					"LILU_CUSTOM_IOKIT_INIT=1",
 					"$(inherited)",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
@@ -454,7 +471,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MODULE_NAME = com.ZormIndustries.NootedBlue;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
@@ -499,6 +516,8 @@
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"MODULE_VERSION=$(MODULE_VERSION)",
 					"PRODUCT_NAME=$(PRODUCT_NAME)",
+					"APPLE_KEXT_ASSERTIONS=1",
+					"LILU_CUSTOM_IOKIT_INIT=1",
 				);
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = NootedBlue/Info.plist;
@@ -507,7 +526,7 @@
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
 				LLVM_LTO = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MODULE_NAME = com.ZormIndustries.NootedBlue;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";
@@ -620,7 +639,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)/MacKernelSDK/Library/x86_64",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
+				MACOSX_DEPLOYMENT_TARGET = 10.12;
 				MODULE_NAME = com.ZormIndustries.NootedBlue;
 				MODULE_START = "$(PRODUCT_NAME)_kern_start";
 				MODULE_STOP = "$(PRODUCT_NAME)_kern_stop";

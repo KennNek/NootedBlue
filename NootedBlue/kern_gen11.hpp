@@ -8,7 +8,6 @@
 
 class Gen11 {
     public:
-    static Gen11 *callback;
     void init();
     bool processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
 };

@@ -10,6 +10,9 @@ The Source Code of this Original Work is licensed under the `Thou Shalt Not Prof
 - Gen 9.5: N/A
 - Gen 11: N/A
 
+Note: you still have to set `AAPL,ig-platform-id` and you also have to add `-disablegfxfirmware` if you are on Skylake+
+Refer to [WhateverGreen's Framebuffer list](https://github.com/acidanthera/WhateverGreen/blob/master/Manual/FAQ.IntelHD.en.md) on what framebuffer to set for your system.
+
 ## Compatibility:
 - Haswell (10.12+)
 - Broadwell (10.14+, work in progress)

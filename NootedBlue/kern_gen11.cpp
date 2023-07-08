@@ -16,24 +16,19 @@ static KernelPatcher::KextInfo kextG11HW {"com.apple.driver.AppleIntelICLGraphic
     KernelPatcher::KextInfo::Unloaded};
 
 void Gen11::init() {
-    callback = this;
     lilu.onKextLoadForce(&kextG11FB);
     lilu.onKextLoadForce(&kextG11HW);
 }
 
 bool Gen11::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
     if (kextG11FB.loadIndex == index) {
-        NBlue::callback->igfxGen = iGFXGen::Gen8;
-
-        NBlue::callback->patchset.MiscNames->fb = "AppleIntelICLLPGraphicsFramebuffer";
-        NBlue::callback->patchset.MiscNames->hw = "AppleIntelICLGraphics";
-        NBlue::callback->patchset.MiscNames->mtl = "AppleIntelICLGraphicsMTLDriver";
-        NBlue::callback->patchset.MiscNames->va = "AppleIntelICLGraphicsVADriver";
+        NBlue::callback->igfxGen = iGFXGen::Gen11;
 
         DBGLOG("gen11", "Loaded AppleIntelICLLPGraphicsFramebuffer!");
         return true;
     } else if (kextG11HW.loadIndex == index) {
         DBGLOG("gen11", "Loaded AppleIntelICLGraphics!");
+        // TBF
         return true;
     }
 

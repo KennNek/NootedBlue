@@ -9,9 +9,8 @@
 
 class HSW {
     public:
-    static HSW *callback;
     void init();
-    bool configurePatches(size_t index);
+    bool processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size);
 };
 
 #endif /* kern_hsw_hpp */

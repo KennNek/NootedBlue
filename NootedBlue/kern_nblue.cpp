@@ -2,11 +2,12 @@
 //  details.
 
 #include "kern_nblue.hpp"
+#include "kern_gen11.hpp"
 #include "kern_gen8.hpp"
 #include "kern_gen9.hpp"
 #include "kern_gen9_5.hpp"
-#include "kern_gen11.hpp"
 #include "kern_hsw.hpp"
+#include "kern_model.hpp"
 #include <Headers/kern_api.hpp>
 #include <Headers/kern_devinfo.hpp>
 #include <Headers/kern_util.hpp>
@@ -31,6 +32,7 @@ void NBlue::init() {
         this);
     gen8.init();
     gen9.init();
+    gen11.init();
     hsw.init();
 }
 
@@ -55,16 +57,20 @@ void NBlue::processPatcher(KernelPatcher &patcher) {
         }
 
         static uint8_t builtin[] = {0x01};
-        this->kVer = getKernelVersion();
         this->iGPU->setProperty("built-in", builtin, arrsize(builtin));
         this->deviceId = WIOKit::readPCIConfigValue(this->iGPU, WIOKit::kIOPCIConfigDeviceID);
+        this->pciRevision = WIOKit::readPCIConfigValue(NBlue::callback->iGPU, WIOKit::kIOPCIConfigRevisionID);
+
+        // Why init here rather than earlier? Because we need the Device ID for proper Gen 9.5 initialisation due to the
+        // fact that Apple uses AIKBL* for CFL
+        gen9_5.init();
 
         DeviceInfo::deleter(devInfo);
     } else {
         SYSLOG("nblue", "Failed to create DeviceInfo");
     }
 
-    if (this->kVer == 20) {
+    if (getKernelVersion() >= KernelVersion::BigSur) {
         KernelPatcher::RouteRequest requests[] = {
             {"_cs_validate_page", csValidatePage, this->orgCsValidatePage},
         };
@@ -77,53 +83,16 @@ void NBlue::processPatcher(KernelPatcher &patcher) {
 }
 
 bool NBlue::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t address, size_t size) {
-    if (hsw.configurePatches(index)) {
-        DBGLOG("nblue", "Applied Haswell configuration");
+    if (hsw.processKext(patcher, index, address, size)) {
+        DBGLOG("nblue", "Processed Haswell configuration");
     } else if (gen8.processKext(patcher, index, address, size)) {
-        DBGLOG("nblue", "Applied Generation 8 configuration");
+        DBGLOG("nblue", "Processed Generation 8 configuration");
     } else if (gen9.processKext(patcher, index, address, size)) {
-        DBGLOG("nblue", "Applied Generation 9 configuration");
-	} else if (gen9_5.processKext(patcher, index, address, size)) {
-		DBGLOG("nblue", "Applied Generation 9.5 configuration");
-	} else if (gen11.processKext(patcher, index, address, size)) {
-		DBGLOG("nblue", "Applied Generation 11 configuration");
-	}
-
-    KernelPatcher::LookupPatch patches[] = {
-        {this->patchset.HWKext, this->patchset.HWPatch1->find, this->patchset.HWPatch1->repl,
-            this->patchset.HWPatch1->arrsize, 1},
-        {this->patchset.HWKext, this->patchset.HWPatch2->find, this->patchset.HWPatch2->repl,
-            this->patchset.HWPatch2->arrsize, 1},
-        {this->patchset.HWKext, this->patchset.HWPatch3->find, this->patchset.HWPatch3->repl,
-            this->patchset.HWPatch3->arrsize, 1},
-        {this->patchset.HWKext, this->patchset.HWPatch4->find, this->patchset.HWPatch4->repl,
-            this->patchset.HWPatch4->arrsize, 1},
-    };
-    for (auto &patch : patches) {
-        patcher.applyLookupPatch(&patch);
-        SYSLOG_COND(patcher.getError() != KernelPatcher::Error::NoError, "nblue", "Failed to apply %c patch: %d",
-            this->patchset.MiscNames->hw, patcher.getError());
-        patcher.clearError();
-    }
-
-    DBGLOG("nblue", "Applying patches for %c for OS version %c", callback->patchset.MiscNames->mtl,
-        this->patchset.MiscNames->os);
-
-    lilu.onProcLoadForce(this->patchset.MTLProcInfo, 1, nullptr, nullptr, this->patchset.MTLPatch1, 1);
-    lilu.onProcLoadForce(this->patchset.MTLProcInfo, 1, nullptr, nullptr, this->patchset.MTLPatch2, 1);
-    if (this->kVer > 16 && this->igfxGen == iGFXGen::Haswell) {
-        // 10.13 and 10.14 have 3 MTLDriver patches compared to 2 for Sierra, likely due to Metal 2 or something
-        lilu.onProcLoad(this->patchset.MTLProcInfo, 1, nullptr, nullptr, this->patchset.MTLPatch3, 1);
-    }
-
-    // argument here for debugging since VA isn't critical for operations
-    if (!checkKernelArgument("-patchbundlesoff")) {
-        DBGLOG("nblue", "Applying patches for %c", this->patchset.MiscNames->va);
-        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch1, 1);
-        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch2, 1);
-        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch3, 1);
-        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch4, 1);
-        lilu.onProcLoad(this->patchset.VAProcInfo, 1, nullptr, nullptr, this->patchset.VAPatch5, 1);
+        DBGLOG("nblue", "Processed Generation 9 configuration");
+    } else if (gen9_5.processKext(patcher, index, address, size)) {
+        DBGLOG("nblue", "Processed Generation 9.5 configuration");
+    } else if (gen11.processKext(patcher, index, address, size)) {
+        DBGLOG("nblue", "Processed Generation 11 configuration");
     }
 
     return true;
@@ -139,7 +108,7 @@ void NBlue::csValidatePage(vnode *vp, memory_object_t pager, memory_object_offse
     if (LIKELY(!vn_getpath(vp, path, &pathlen))) {
         if (UNLIKELY(UserPatcher::matchSharedCachePath(path))) {
             if (callback->igfxGen == iGFXGen::Haswell) {
-                if (callback->kVer == 20) {
+                if (getKernelVersion() == KernelVersion::BigSur) {
                     DBGLOG("nblue", "Placeholder code for the future, usually this is when we would start patching "
                                     "bundles from the dyld cache");
                 }

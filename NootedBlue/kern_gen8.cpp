@@ -2,7 +2,9 @@
 //  details.
 
 #include "kern_gen8.hpp"
+#include "kern_gen8_patches.hpp"
 #include "kern_nblue.hpp"
+#include "kern_patcherplus.hpp"
 #include <Headers/kern_api.hpp>
 
 static const char *pathG8FB =
@@ -16,7 +18,6 @@ static KernelPatcher::KextInfo kextG8HW {"com.apple.driver.AppleIntelBDWGraphics
     KernelPatcher::KextInfo::Unloaded};
 
 void Gen8::init() {
-    callback = this;
     lilu.onKextLoadForce(&kextG8FB);
     lilu.onKextLoadForce(&kextG8HW);
 }
@@ -25,15 +26,26 @@ bool Gen8::processKext(KernelPatcher &patcher, size_t index, mach_vm_address_t a
     if (kextG8FB.loadIndex == index) {
         NBlue::callback->igfxGen = iGFXGen::Gen8;
 
-        NBlue::callback->patchset.MiscNames->fb = "AppleIntelBDWGraphicsFramebuffer";
-        NBlue::callback->patchset.MiscNames->hw = "AppleIntelBDWGraphics";
-        NBlue::callback->patchset.MiscNames->mtl = "AppleIntelBDWGraphicsMTLDriver";
-        NBlue::callback->patchset.MiscNames->va = "AppleIntelBDWGraphicsVADriver";
-
         DBGLOG("gen8", "Loaded AppleIntelBDWGraphicsFramebuffer!");
-        return true;
     } else if (kextG8HW.loadIndex == index) {
         DBGLOG("gen8", "Loaded AppleIntelBDWGraphics!");
+        switch (getKernelVersion()) {
+            case KernelVersion::Mojave: {
+                DBGLOG("gen8", "Using Mojave patchset");
+
+                LookupPatchPlus const patches[] = {
+                    {&kextG8HW, kGen8HWMojave1Original, kGen8HWMojave1Patched, arrsize(kGen8HWMojave1Original), 1},
+                    {&kextG8HW, kGen8HWMojave2Original, kGen8HWMojave2Patched, arrsize(kGen8HWMojave2Original), 1},
+                    {&kextG8HW, kGen8HWMojave3Original, kGen8HWMojave3Patched, arrsize(kGen8HWMojave3Original), 1},
+                };
+
+                PANIC_COND(!LookupPatchPlus::applyAll(&patcher, patches, address, size), "hsw",
+                    "Failed to apply patches: %d", patcher.getError());
+            }
+            default: {
+                PANIC("gen8", "Unsupported OS version!");
+            }
+        }
         return true;
     }
 
