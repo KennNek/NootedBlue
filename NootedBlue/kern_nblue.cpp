@@ -31,7 +31,7 @@ void NBlue::init() {
         },
         this);
     gen8.init();
-    gen9_5.init()
+    gen9_5.init();
     gen9.init();
     gen11.init();
     hsw.init();
